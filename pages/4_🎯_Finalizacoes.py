@@ -56,7 +56,6 @@ div[data-testid="stMetric"] {
         1px solid rgba(148,163,184,0.12);
 
     padding: 18px;
-
     border-radius: 16px;
 }
 
@@ -256,6 +255,30 @@ st.bar_chart(
 
 
 # ==========================================================
+# COORDENADAS DOS CHUTES
+# ==========================================================
+
+coordenadas = chutes[
+    chutes["location"].notna()
+].copy()
+
+
+if not coordenadas.empty:
+
+    coordenadas["x"] = coordenadas[
+        "location"
+    ].apply(
+        lambda local: local[0]
+    )
+
+    coordenadas["y"] = coordenadas[
+        "location"
+    ].apply(
+        lambda local: local[1]
+    )
+
+
+# ==========================================================
 # MAPA DE CHUTES
 # ==========================================================
 
@@ -277,72 +300,137 @@ if total_chutes == 0:
         "Não há finalizações disponíveis para esta partida."
     )
 
+elif coordenadas.empty:
+
+    st.warning(
+        "Não há coordenadas disponíveis para os chutes."
+    )
+
 else:
 
-    coordenadas = chutes[
-        chutes["location"].notna()
-    ].copy()
+    pitch = Pitch(
+        pitch_type="statsbomb",
+        pitch_color="#0B1020",
+        line_color="#E5E7EB"
+    )
 
-    if coordenadas.empty:
+    fig, ax = pitch.draw(
+        figsize=(12, 7)
+    )
 
-        st.warning(
-            "Não há coordenadas disponíveis para os chutes."
+
+    for _, chute in coordenadas.iterrows():
+
+        resultado = chute.get(
+            "shot_outcome",
+            ""
         )
 
-    else:
+        tamanho = 180
 
-        coordenadas["x"] = coordenadas[
-            "location"
-        ].apply(
-            lambda local: local[0]
+        if resultado == "Goal":
+
+            tamanho = 320
+
+
+        pitch.scatter(
+            chute["x"],
+            chute["y"],
+            s=tamanho,
+            ax=ax,
+            alpha=0.75
         )
 
-        coordenadas["y"] = coordenadas[
-            "location"
-        ].apply(
-            lambda local: local[1]
-        )
 
-        pitch = Pitch(
-            pitch_type="statsbomb",
-            pitch_color="#0B1020",
-            line_color="#E5E7EB"
-        )
+    ax.set_title(
+        f'Finalizações do Real Madrid\n{linha_partida["placar"]}',
+        fontsize=16
+    )
 
-        fig, ax = pitch.draw(
-            figsize=(12, 7)
-        )
 
-        for _, chute in coordenadas.iterrows():
+    st.pyplot(
+        fig,
+        use_container_width=True
+    )
 
-            resultado = chute.get(
-                "shot_outcome",
-                ""
-            )
 
-            tamanho = 180
+# ==========================================================
+# HEATMAP MPLSOCCER
+# ==========================================================
 
-            if resultado == "Goal":
+st.divider()
 
-                tamanho = 320
+st.markdown(
+    '<div class="section-label">Heatmap</div>',
+    unsafe_allow_html=True
+)
 
-            pitch.scatter(
-                chute["x"],
-                chute["y"],
-                s=tamanho,
-                ax=ax,
-                alpha=0.75
-            )
+st.subheader(
+    "Concentração das finalizações"
+)
 
-        ax.set_title(
-            f'Finalizações do Real Madrid\n{linha_partida["placar"]}',
-            fontsize=16
-        )
+st.write(
+    """
+    O heatmap divide o campo em regiões e mostra onde as
+    finalizações estiveram mais concentradas durante a partida.
+    """
+)
 
-        st.pyplot(
-            fig,
-            use_container_width=True
-        )
+
+if coordenadas.empty:
+
+    st.info(
+        "Não há dados suficientes para gerar o heatmap."
+    )
+
+else:
+
+    pitch_heatmap = Pitch(
+        pitch_type="statsbomb",
+        pitch_color="#0B1020",
+        line_color="#E5E7EB"
+    )
+
+
+    bin_statistic = pitch_heatmap.bin_statistic(
+        coordenadas["x"],
+        coordenadas["y"],
+        statistic="count",
+        bins=(10, 8)
+    )
+
+
+    fig_heatmap, ax_heatmap = pitch_heatmap.draw(
+        figsize=(12, 7)
+    )
+
+
+    pitch_heatmap.heatmap(
+        bin_statistic,
+        ax=ax_heatmap,
+        alpha=0.75
+    )
+
+
+    pitch_heatmap.scatter(
+        coordenadas["x"],
+        coordenadas["y"],
+        ax=ax_heatmap,
+        s=35,
+        alpha=0.45
+    )
+
+
+    ax_heatmap.set_title(
+        f'Heatmap de finalizações\n{linha_partida["placar"]}',
+        fontsize=16
+    )
+
+
+    st.pyplot(
+        fig_heatmap,
+        use_container_width=True
+    )
 
 
 # ==========================================================
@@ -363,6 +451,7 @@ jogadores = sorted(
     .unique()
     .tolist()
 )
+
 
 opcao_jogador = st.selectbox(
     "Selecione um jogador",
@@ -391,6 +480,7 @@ st.subheader(
     "Dados das finalizações"
 )
 
+
 colunas_disponiveis = [
     coluna
     for coluna in [
@@ -406,6 +496,7 @@ colunas_disponiveis = [
     if coluna in chutes_filtrados.columns
 ]
 
+
 st.dataframe(
     chutes_filtrados[
         colunas_disponiveis
@@ -417,9 +508,10 @@ st.dataframe(
 
 
 # ==========================================================
-# RESUMO
+# RODAPÉ
 # ==========================================================
 
 st.caption(
-    "Fonte: StatsBomb Open Data • Visualização de campo com mplsoccer"
+    "Fonte: StatsBomb Open Data • "
+    "Visualizações de campo com mplsoccer"
 )

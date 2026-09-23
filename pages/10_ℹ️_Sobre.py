@@ -642,6 +642,39 @@ st.info(
     """
 )
 
+# ==========================================================
+# DEMONSTRAÇÃO DE RECURSOS STREAMLIT
+# ==========================================================
+
+st.divider()
+
+st.markdown(
+    '<div class="section-label">Demonstração técnica</div>',
+    unsafe_allow_html=True
+)
+
+st.header(
+    "Recursos adicionais do Streamlit"
+)
+
+st.text(
+    "Projeto acadêmico de Sports Analytics desenvolvido com Python."
+)
+
+st.write(
+    """
+    A seção abaixo utiliza o recurso **Streamlit Magic**,
+    em que uma variável é apresentada diretamente sem
+    utilizar explicitamente `st.write()`.
+    """
+)
+
+mensagem_magic = (
+    "⚽ Real Madrid Analytics • "
+    "Exemplo executado com Streamlit Magic"
+)
+
+mensagem_magic
 
 # ==========================================================
 # CRÉDITOS
