@@ -167,9 +167,7 @@ def gerar_conclusao_temporada():
         # --------------------------------------------------
 
         jogadores = (
-            eventos_real[
-                "player"
-            ]
+            eventos_real["player"]
             .dropna()
             .astype(str)
             .unique()
@@ -302,9 +300,7 @@ with st.spinner(
     "Consolidando os dados dos 38 jogos..."
 ):
 
-    jogos, jogadores = (
-        gerar_conclusao_temporada()
-    )
+    jogos, jogadores = gerar_conclusao_temporada()
 
 
 # ==========================================================
@@ -671,7 +667,15 @@ em gols, com <strong>{int(artilheiro["Gols"])}</strong>,
 enquanto <strong>{mais_passes["Jogador"]}</strong>
 registrou o maior volume de passes.
 
-Em síntese, o Real Madrid apresentou uma evolução ofensiva marcada por maior eficiência na segunda metade da temporada: marcou mais gols mesmo finalizando menos por partida, enquanto manteve elevado volume de circulação da bola. A produção ofensiva também teve forte participação individual, com Cristiano Ronaldo como principal finalizador e artilheiro e Toni Kroos como principal referência no volume de passes.
+Em síntese, o Real Madrid apresentou uma evolução ofensiva
+marcada por maior eficiência na segunda metade da temporada:
+marcou mais gols mesmo finalizando menos por partida,
+enquanto manteve elevado volume de circulação da bola.
+A produção ofensiva também teve forte participação individual,
+com <strong>{artilheiro["Jogador"]}</strong> como principal
+finalizador e artilheiro e
+<strong>{mais_passes["Jogador"]}</strong> como principal
+referência no volume de passes.
 
 </div>
 """
@@ -719,13 +723,25 @@ with st.expander(
             ],
 
             "Chutes por jogo": [
-                chutes_primeira,
-                chutes_segunda
+                round(
+                    chutes_primeira,
+                    1
+                ),
+                round(
+                    chutes_segunda,
+                    1
+                )
             ],
 
             "Passes por jogo": [
-                passes_primeira,
-                passes_segunda
+                round(
+                    passes_primeira,
+                    1
+                ),
+                round(
+                    passes_segunda,
+                    1
+                )
             ]
         }
     )
