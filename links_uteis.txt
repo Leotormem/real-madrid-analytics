@@ -1,6 +1,6 @@
 
 Deploy:
-https://real-madrid-analytics-eavg8d2pbfn6xckjzmqoaf.streamlit.app/Jogadores
+https://real-madrid-analytics-eavg8d2pbfn6xckjzmqoaf.streamlit.app/
 
 GitHub
 https://github.com/Leotormem/real-madrid-analytics
