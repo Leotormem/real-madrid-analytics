@@ -671,12 +671,7 @@ em gols, com <strong>{int(artilheiro["Gols"])}</strong>,
 enquanto <strong>{mais_passes["Jogador"]}</strong>
 registrou o maior volume de passes.
 
-Assim, os dados mostram que o desempenho ofensivo não deve
-ser analisado apenas pelo número final de gols. A combinação
-entre volume de finalizações, circulação da bola, eficiência
-e participação individual permite observar como a produção
-ofensiva se comportou durante diferentes momentos da
-temporada.
+Em síntese, o Real Madrid apresentou uma evolução ofensiva marcada por maior eficiência na segunda metade da temporada: marcou mais gols mesmo finalizando menos por partida, enquanto manteve elevado volume de circulação da bola. A produção ofensiva também teve forte participação individual, com Cristiano Ronaldo como principal finalizador e artilheiro e Toni Kroos como principal referência no volume de passes.
 
 </div>
 """
